@@ -1,0 +1,17 @@
+<?php
+
+  /**
+   * @file Core functionality for the book solution pack
+   * @author griffinj@lafayette.edu
+   *
+   */
+
+require_once dirname(__FILE__) . '/theme/theme.inc';
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function islandora_dss_book_theme_registry_alter(&$theme_registry) {
+
+  $theme_registry['islandora_book_book']['template'] = drupal_get_path('module', 'islandora_dss_book') . '/theme/islandora-book';
+}
