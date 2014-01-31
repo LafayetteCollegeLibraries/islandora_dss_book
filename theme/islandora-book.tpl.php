@@ -6,6 +6,19 @@
  *
  */
 ?>
+<?php if (isset($pdf_viewer)): ?>
+    <div class="islandora-pdf-object islandora">
+       <div class="islandora-pdf-content-wrapper clearfix">
+
+       <div class="islandora-pdf-content">
+
+	  <?php print $pdf_viewer; ?>
+</div>
+
+</div>
+
+<?php else: ?>
+
 <?php if (isset($viewer)): ?>
 
     <?php if (isset($viewer_page_controls)): ?>
@@ -15,6 +28,8 @@
   <div id="book-viewer">
     <?php print $viewer; ?>
   </div>
+<?php endif; ?>
+
 <?php endif; ?>
 
   <fieldset class="islandora-book-metadata">

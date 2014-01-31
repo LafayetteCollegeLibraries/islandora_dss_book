@@ -1,6 +1,7 @@
 name = "Lafayette College Libraries extension of the Islandora Book Solution Pack"
 description = "Extends the Islandora Book Solution Pack"
 package = Islandora
+dependencies[] = islandora_dss_pdf
 dependencies[] = islandora_book
 dependencies[] = islandora
 dependencies[] = file

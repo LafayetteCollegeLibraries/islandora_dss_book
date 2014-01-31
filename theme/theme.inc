@@ -14,6 +14,28 @@
  */
 function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
 
+  $islandora_object = $variables['object'];
+
+  dpm($variables);
+
+  $dc_array = $variables['dc_array'];
+
+  // Refactor
+  $is_newspaper = false;
+  if(array_key_exists('dc:type', $dc_array)) {
+
+    if($dc_array['dc:type']['value'] == 'Student newspaper') {
+
+      $is_newspaper = true;
+    }
+  }
+
+  if($is_newspaper) {
+
+    drupal_load('module', 'islandora_dss_pdf');
+    islandora_dss_pdf_preprocess_islandora_pdf($variables);
+  } else {
+
   // Determine if OpenSeadragon is the viewer...
   if(preg_match('/openseadragon/', $variables['viewer'])) {
 
@@ -41,5 +63,6 @@ function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
 				  );
 
     $variables['viewer_page_controls'] = drupal_render($viewer_page_controls);
+  }
   }
   }
