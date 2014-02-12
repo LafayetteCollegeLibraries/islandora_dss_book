@@ -42,7 +42,14 @@
 
           <?php foreach ($mods_object as $key => $value): ?>
 
-            <dt class="<?php print $value['class']; ?><?php print $row_field == 0 ? ' first' : ''; ?>">
+            <dt class="<?php
+print $value['class'];
+print $row_field == 0 ? ' first' : '';
+if($value['label'] != ''):
+
+  print ' islandora-inline-metadata-displayed';
+endif;
+?>">
 
               <?php print $value['label']; ?>
             </dt>
