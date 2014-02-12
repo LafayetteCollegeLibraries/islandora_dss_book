@@ -43,13 +43,15 @@
           <?php foreach ($mods_object as $key => $value): ?>
 
             <dt class="<?php print $value['class']; ?><?php print $row_field == 0 ? ' first' : ''; ?>">
+
               <?php print $value['label']; ?>
             </dt>
             <dd class="<?php print $value['class']; ?><?php print $row_field == 0 ? ' first' : ''; ?>">
 
-              <?php if( array_key_exists('date_value', $value)): ?>
+              <?php if(array_key_exists('date_value', $value)): ?>
 
-		<?php print array_key_exists('facet', $value) ? l($value['date_value'], "islandora/search/eastasia." . $value['facet'] . "%3A" . $value['facet_value']) : $value['date_value']; ?>
+	        <?php print array_key_exists('facet', $value) ? l($value['date_value'], "islandora/search/*:*", array('query' => array('f[0]' => $value['facet'] . ':' . $value['facet_value'] . ''
+																       ))) : $value['date_value']; ?>
 	      <?php else: ?>
 
                 <?php
@@ -57,7 +59,8 @@
 		    // print array_key_exists('facet', $value) ? l($value['value'], "islandora/search/eastasia." . $value['facet'] . "%3A" . $value['facet_value']) : $value['value'];
 		    if(array_key_exists('facet', $value)) {
 
-		      print l($value['value'], "islandora/search/eastasia." . $value['facet'] . "%3A" . $value['facet_value']);
+		      //print l($value['value'], "islandora/search/*:*?f[0]=" . $value['facet'] . ':' . $value['facet_value'] . '');
+		      print l($value['value'], "islandora/search/*:*", array('query' => array('f[0]' => $value['facet'] . ':' . $value['facet_value'] . '')));
 		    } elseif(array_key_exists('href', $value)) {
 
                       print l($value['value'], $value['href']);
