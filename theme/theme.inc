@@ -34,13 +34,22 @@ function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
 
     drupal_load('module', 'islandora_dss_pdf');
     islandora_dss_pdf_preprocess_islandora_pdf($variables);
+
+    // Work-around
+    drupal_add_js("
+console.log(PDFView);
+PDFView.open( '/islandora/object/" . $islandora_object->id . "/datastream/OBJ/view' );
+jQuery(document).ready(function() { PDFView.open( '/islandora/object/" . $islandora_object->id . "/datastream/OBJ/view' )  });",
+		  array('type' => 'inline', 'scope' => 'footer', 'weight' => 5)
+		  );
+
   } else {
 
-  // Determine if OpenSeadragon is the viewer...
-  if(preg_match('/openseadragon/', $variables['viewer'])) {
+    // Determine if OpenSeadragon is the viewer...
+    if(preg_match('/openseadragon/', $variables['viewer'])) {
 
-    // If these are East Asia Image Collection postcards, modify the text for the links...
-    if(false) {
+      // If these are East Asia Image Collection postcards, modify the text for the links...
+      if(false) {
       
       $prev_content = t('Front');
       $next_content = t('Back');

@@ -33,7 +33,7 @@
 <?php endif; ?>
 
   <fieldset class="islandora-book-metadata">
-  <legend><span class="fieldset-legend"><?php print t('Extended details'); ?></span></legend>
+  <h3 class="islandora-image-details">Details</h3>
     <div class="fieldset-wrapper">
       <dl class="islandora-inline-metadata islandora-book-fields">
         <?php $row_field = 0; ?>
