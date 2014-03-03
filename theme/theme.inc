@@ -24,7 +24,7 @@ function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
   $is_newspaper = false;
   if(array_key_exists('dc:type', $dc_array)) {
 
-    if($dc_array['dc:type']['value'] == 'Student newspaper') {
+    if($dc_array['dc:type']['value'] == 'Student newspaper' && isset($islandora_object->PDF)) {
 
       $is_newspaper = true;
     }
@@ -37,7 +37,6 @@ function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
 
     // Work-around
     drupal_add_js("
-console.log(PDFView);
 PDFView.open( '/islandora/object/" . $islandora_object->id . "/datastream/OBJ/view' );
 jQuery(document).ready(function() { PDFView.open( '/islandora/object/" . $islandora_object->id . "/datastream/OBJ/view' )  });",
 		  array('type' => 'inline', 'scope' => 'footer', 'weight' => 5)
@@ -59,6 +58,8 @@ jQuery(document).ready(function() { PDFView.open( '/islandora/object/" . $island
       $next_content = t('Next');
     }
 
+      $viewer_page_controls = array();
+      /*
     $viewer_page_controls = array('islandora-openseadragon-prev' => array('#type' => 'markup',
 									  '#markup' => '<div id="islandora-openseadragon-prev" class="islandora-openseadragon-page-control">' . $prev_content . '</div>',
 									  '#prefix' => '<div class="islandora-openseadragon-page-controls">',
@@ -70,6 +71,7 @@ jQuery(document).ready(function() { PDFView.open( '/islandora/object/" . $island
 										'#markup' => '<div id="islandora-openseadragon-page-state" class="islandora-openseadragon-page-control"></div>',
 										'#suffix' => '</div>'),
 				  );
+      */
 
     $variables['viewer_page_controls'] = drupal_render($viewer_page_controls);
   }

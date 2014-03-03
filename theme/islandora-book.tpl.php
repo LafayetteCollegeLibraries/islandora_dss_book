@@ -25,7 +25,11 @@
 
 	<?php print $viewer_page_controls; ?>
     <?php endif; ?>
+
   <div id="book-viewer">
+
+    <div id="book-viewer-pages-overlay"></div>
+
     <?php print $viewer; ?>
   </div>
 <?php endif; ?>
@@ -33,7 +37,7 @@
 <?php endif; ?>
 
   <fieldset class="islandora-book-metadata">
-  <h3 class="islandora-image-details">Details</h3>
+  <h3 class="islandora-image-details">Item Details</h3>
     <div class="fieldset-wrapper">
       <dl class="islandora-inline-metadata islandora-book-fields">
         <?php $row_field = 0; ?>
@@ -41,6 +45,8 @@
         <?php if (isset($mods_object)): ?>
 
           <?php foreach ($mods_object as $key => $value): ?>
+
+	    <?php if ($value['label'] or $value['value']): ?>
 
             <dt class="<?php
 print $value['class'];
@@ -53,12 +59,19 @@ endif;
 
               <?php print $value['label']; ?>
             </dt>
+
             <dd class="<?php print $value['class']; ?><?php print $row_field == 0 ? ' first' : ''; ?>">
 
               <?php if(array_key_exists('date_value', $value)): ?>
 
-	        <?php print array_key_exists('facet', $value) ? l($value['date_value'], "islandora/search/*:*", array('query' => array('f[0]' => $value['facet'] . ':' . $value['facet_value'] . ''
-																       ))) : $value['date_value']; ?>
+	        <?php
+
+		    /*
+		    print array_key_exists('facet', $value) ? l($value['date_value'], "islandora/search/*:*", array('query' => array('f[0]' => $value['facet'] . ':' . $value['facet_value'] . ''
+																     ))) : $value['date_value'];
+		    */
+		    print $value['facet_href'];
+		    ?>
 	      <?php else: ?>
 
                 <?php
@@ -67,21 +80,23 @@ endif;
 		    if(array_key_exists('facet', $value)) {
 
 		      //print l($value['value'], "islandora/search/*:*?f[0]=" . $value['facet'] . ':' . $value['facet_value'] . '');
-		      print l($value['value'], "islandora/search/*:*", array('query' => array('f[0]' => $value['facet'] . ':' . $value['facet_value'] . '')));
+		      //print l($value['value'], "islandora/search/*:*", array('query' => array('f[0]' => $value['facet'] . ':' . $value['facet_value'] . '')));
+		      print $value['facet_href'];
 		    } elseif(array_key_exists('href', $value)) {
 
                       print l($value['value'], $value['href']);
-		    } else {
+                    } else {
 
 		      print $value['value'];
 		    }
 		?>
 	      <?php endif; ?>
             </dd>
+
+	    <?php endif; ?>
           <?php $row_field++; ?>
         <?php endforeach; ?>
         <?php endif; ?>
-
       </dl>
     </div>
   </fieldset>
