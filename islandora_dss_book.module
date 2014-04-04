@@ -15,3 +15,44 @@ function islandora_dss_book_theme_registry_alter(&$theme_registry) {
 
   $theme_registry['islandora_book_book']['template'] = drupal_get_path('module', 'islandora_dss_book') . '/theme/islandora-book';
 }
+
+/**
+ * Implements hook_theme().
+ *
+ */
+function islandora_dss_book_theme() {
+
+  return array('dss_eastasia_islandora_book_book' => array('arguments' => array('object' => NULL),
+							   'file' => 'theme/theme.inc',
+							   'template' => 'theme/islandora-book',
+							   ),
+	       );
+}
+
+function _islandora_book_book_menu(FedoraObject $object) {
+
+  return theme('dss_eastasia_front_page', array('object' => $object));
+}
+
+/**
+ * Implements hook_menu_alter().
+ *
+ */
+function islandora_dss_book_menu_alter(&$items) {
+
+  drupal_load('module', 'islandora_book');
+
+  //$items['islandora/object/%islandora_object/view']['title'] = 'Front';
+  $items['islandora/object/%islandora_object/view']['page callback'] = '_islandora_book_book_menu';
+  $items['islandora/object/%islandora_object/view']['page arguments'] = array(2);
+  //$items['islandora/object/%islandora_object/view/default']['title'] = 'Front';
+  $items['islandora/object/%islandora_object/view/default']['page callback'] = '_islandora_book_book_menu';
+  $items['islandora/object/%islandora_object/view/default']['page arguments'] = array(2);
+
+  unset($items['islandora/object/%islandora_object/pages']);
+  unset($items['islandora/object/%islandora_object/view/default']);
+
+  //$items['browse']['page callback'] = 'dss_eastasia_islandora_solr_facet_pages_callback';
+
+  //$items['islandora/search']['page callback'] = '_dss_eastasia_islandora_solr';
+}
