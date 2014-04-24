@@ -25,6 +25,18 @@ function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
    */
 
   global $base_url;
+  $meta_element_open_graph_type = array('#type' => 'html_tag',
+					'#tag' => 'meta',
+					'#attributes' => array('property' =>  'og:type',
+							       'content' => 'article'),
+					);
+
+  $meta_element_open_graph_url = array('#type' => 'html_tag',
+				       '#tag' => 'meta',
+				       '#attributes' => array('property' =>  'og:url',
+							      'content' => $base_url . '/' . drupal_get_path_alias()),
+				       );
+
   $meta_element_open_graph_url = array('#type' => 'html_tag',
 				       '#tag' => 'meta',
 				       '#attributes' => array('property' =>  'og:url',
@@ -42,6 +54,13 @@ function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
 								'content' => $islandora_object->label,
 								)
 					 );
+  // For all <meta> elements
+  $meta_elements = array(
+			 'meta_element_open_graph_type' => $meta_element_open_graph_type,
+			 'meta_element_open_graph_url' => $meta_element_open_graph_url,
+			 'meta_element_open_graph_author' => $meta_element_open_graph_author,
+			 'meta_element_open_graph_title' => $meta_element_open_graph_title,
+			 );
   
   if(in_array('islandora:newspaper', $islandora_object->getParents())) {
 
@@ -52,26 +71,19 @@ function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
 jQuery(document).ready(function() { PDFView.open('" . $base_url . "/islandora/object/" . $islandora_object->id . "/datastream/OBJ/view' )  });",
 		  array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
 
-    $meta_elements = array(
-			   'meta_element_open_graph_url' => $meta_element_open_graph_url,
-			   'meta_element_open_graph_author' => $meta_element_open_graph_author,
+    $meta_elements['meta_element_open_graph_image'] = array('#type' => 'html_tag',
+							    '#tag' => 'meta',
+							    '#attributes' => array('property' =>  'og:image',
+										   'content' => $base_url . '/' . current_path() . '/datastream/TN/view',
+										   ),
+							    );
+    $meta_elements['meta_element_open_graph_site_name'] = array('#type' => 'html_tag',
+								'#tag' => 'meta',
+								'#attributes' => array('property' =>  'og:site_name',
+										       'content' => 'Lafayette Newspaper Collection',
+										       )
+								);
 
-			   'meta_element_open_graph_image' => array('#type' => 'html_tag',
-								    '#tag' => 'meta',
-								    '#attributes' => array('property' =>  'og:image',
-											   'content' => $base_url . '/' . current_path() . '/datastream/TN/view',
-											   ),
-								    ),
-			   'meta_element_open_graph_title' => $meta_element_open_graph_title,
-			   'meta_element_open_graph_site_name' => array('#type' => 'html_tag',
-									'#tag' => 'meta',
-									'#attributes' => array('property' =>  'og:site_name',
-											       'content' => 'Lafayette Newspaper Collection',
-											       )
-									),
-
-			   );
-    
     foreach($meta_elements as $key => $meta_element) {
 
       // Add header meta tag for IE to head
@@ -106,25 +118,19 @@ jQuery(document).ready(function() { PDFView.open('" . $base_url . "/islandora/ob
 
       $collection = 'East Asia Image Collection';
 
-      $meta_elements = array(
-			     'meta_element_open_graph_url' => $meta_element_open_graph_url,
-			     'meta_element_open_graph_author' => $meta_element_open_graph_author,
-			     'meta_element_open_graph_image' => $meta_element_open_graph_image,
-			     'meta_element_open_graph_title' => $meta_element_open_graph_title,
+      $meta_elements['meta_element_open_graph_image'] = $meta_element_open_graph_image;
 
-			     'meta_element_open_graph_description' => array('#type' => 'html_tag',
-									    '#tag' => 'meta',
-									    '#attributes' => array('property' =>  'og:description',
-												   'content' => $collection,
-												   )
-									    ),
-			     );
- 
-    foreach($meta_elements as $key => $meta_element) {
-
-      // Add header meta tag for IE to head
-      drupal_add_html_head($meta_element, $key);
-    }
+      $meta_elements['meta_element_open_graph_description'] = array('#type' => 'html_tag',
+								    '#tag' => 'meta',
+								    '#attributes' => array('property' =>  'og:description',
+											   'content' => $collection,
+											   )
+								    );
+      foreach($meta_elements as $key => $meta_element) {
+	
+	// Add header meta tag for IE to head
+	drupal_add_html_head($meta_element, $key);
+      }
  
       // If these are East Asia Image Collection postcards, modify the text for the links...
       $prev_content = t('Previous');
