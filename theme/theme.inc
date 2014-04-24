@@ -24,55 +24,60 @@ function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
    *
    */
 
-  /*
-  drupal_add_js(libraries_get_path('pdf.js') . '/web/compatibility.js');
-  drupal_add_js(libraries_get_path('pdf.js') . '/web/l10n.js');
-  drupal_add_js(libraries_get_path('pdf.js') . '/build/pdf.worker.js');
-  drupal_add_js(libraries_get_path('pdf.js') . '/build/pdf.js');
-  drupal_add_js(libraries_get_path('pdf.js') . '/web/viewer.js');
-  */
-
+  global $base_url;
   if(in_array('islandora:newspaper', $islandora_object->getParents())) {
 
-    //drupal_load('module', 'islandora_dss_pdf');
     islandora_dss_pdf_preprocess_islandora_pdf($variables);
 
     // Work-around
-    global $base_url;
     drupal_add_js("PDFView.open('" . $base_url . "/islandora/object/" . $islandora_object->id . "/datastream/OBJ/view' );
 jQuery(document).ready(function() { PDFView.open('" . $base_url . "/islandora/object/" . $islandora_object->id . "/datastream/OBJ/view' )  });",
 		  array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
+
+    $meta_ie_render_engine = array('#type' => 'html_tag',
+				   '#tag' => 'meta',
+				   '#attributes' => array('property' =>  'og:image',
+							  'content' => $base_url . '/' . current_path() . '/datastream/OBJ/view',
+							  )
+				   );
+ 
+    // Add header meta tag for IE to head
+    drupal_add_html_head($meta_ie_render_engine, 'meta_ie_render_engine');
 
   } else {
 
     // Determine if OpenSeadragon is the viewer...
     if(preg_match('/openseadragon/', $variables['viewer'])) {
 
-      // If these are East Asia Image Collection postcards, modify the text for the links...
-      if(false) {
-      
-	$prev_content = t('Front');
-	$next_content = t('Back');
+      module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
+      $init_pages = islandora_paged_content_get_pages($islandora_object);
+
+      if(!empty($init_pages)) {
+
+	$init_page = array_shift($init_pages);
+
+	$meta_ie_render_engine = array('#type' => 'html_tag',
+				       '#tag' => 'meta',
+				       '#attributes' => array('property' =>  'og:image',
+							      'content' => $base_url . '/islandora/object/' . $init_page['pid'] . '/datastream/JPG/view')
+				       );
       } else {
 
-	$prev_content = t('Previous');
-	$next_content = t('Next');
+	$meta_ie_render_engine = array('#type' => 'html_tag',
+				       '#tag' => 'meta',
+				       '#attributes' => array('property' =>  'og:image',
+							      'content' => $base_url . '/' . current_path() . '/datastream/JPG/view')
+				       );
       }
+ 
+      // Add header meta tag for IE to head
+      drupal_add_html_head($meta_ie_render_engine, 'meta_ie_render_engine');
+
+      // If these are East Asia Image Collection postcards, modify the text for the links...
+      $prev_content = t('Previous');
+      $next_content = t('Next');
 
       $viewer_page_controls = array();
-      /*
-	$viewer_page_controls = array('islandora-openseadragon-prev' => array('#type' => 'markup',
-	'#markup' => '<div id="islandora-openseadragon-prev" class="islandora-openseadragon-page-control">' . $prev_content . '</div>',
-	'#prefix' => '<div class="islandora-openseadragon-page-controls">',
-	),
-	'islandora-openseadragon-next' => array('#type' => 'markup',
-	'#markup' => '<div id="islandora-openseadragon-next" class="islandora-openseadragon-page-control">' . $next_content . '</div>',
-	),
-	'islandora-openseadragon-page-state' => array('#type' => 'markup',
-	'#markup' => '<div id="islandora-openseadragon-page-state" class="islandora-openseadragon-page-control"></div>',
-	'#suffix' => '</div>'),
-	);
-      */
       
       $variables['viewer_page_controls'] = drupal_render($viewer_page_controls);
     }
