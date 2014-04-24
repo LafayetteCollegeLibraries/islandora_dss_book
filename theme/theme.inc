@@ -44,7 +44,7 @@ function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
 				       );
   $meta_element_open_graph_author = array('#type' => 'html_tag',
 					  '#tag' => 'meta',
-					  '#attributes' => array('property' =>  'og:publisher',
+					  '#attributes' => array('property' =>  'og:author',
 								 'content' => 'https://www.facebook.com/LafayetteCollegeLibrary',
 								 )
 					  );
