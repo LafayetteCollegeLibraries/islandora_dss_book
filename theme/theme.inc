@@ -25,6 +25,24 @@ function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
    */
 
   global $base_url;
+  $meta_element_open_graph_url = array('#type' => 'html_tag',
+				       '#tag' => 'meta',
+				       '#attributes' => array('property' =>  'og:url',
+							      'content' => $base_url . '/' . drupal_get_path_alias()),
+				       );
+  $meta_element_open_graph_author = array('#type' => 'html_tag',
+					  '#tag' => 'meta',
+					  '#attributes' => array('property' =>  'og:author',
+								 'content' => 'https://www.facebook.com/LafayetteCollegeLibrary',
+								 )
+					  );
+  $meta_element_open_graph_title = array('#type' => 'html_tag',
+					 '#tag' => 'meta',
+					 '#attributes' => array('property' =>  'og:title',
+								'content' => $islandora_object->label,
+								)
+					 );
+  
   if(in_array('islandora:newspaper', $islandora_object->getParents())) {
 
     islandora_dss_pdf_preprocess_islandora_pdf($variables);
@@ -34,33 +52,26 @@ function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
 jQuery(document).ready(function() { PDFView.open('" . $base_url . "/islandora/object/" . $islandora_object->id . "/datastream/OBJ/view' )  });",
 		  array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
 
-    $meta_elements = array('meta_element_open_graph_image' => array('#type' => 'html_tag',
+    $meta_elements = array(
+			   'meta_element_open_graph_url' => $meta_element_open_graph_url,
+			   'meta_element_open_graph_author' => $meta_element_open_graph_author,
+
+			   'meta_element_open_graph_image' => array('#type' => 'html_tag',
 								    '#tag' => 'meta',
 								    '#attributes' => array('property' =>  'og:image',
 											   'content' => $base_url . '/' . current_path() . '/datastream/TN/view',
 											   ),
 								    ),
-			   'meta_element_open_graph_title' => array('#type' => 'html_tag',
-								    '#tag' => 'meta',
-								    '#attributes' => array('property' =>  'og:title',
-											   'content' => $islandora_object->label,
-											   )
-								    ),
+			   'meta_element_open_graph_title' => $meta_element_open_graph_title,
 			   'meta_element_open_graph_site_name' => array('#type' => 'html_tag',
 									'#tag' => 'meta',
 									'#attributes' => array('property' =>  'og:site_name',
 											       'content' => 'Lafayette Newspaper Collection',
 											       )
 									),
-			   'meta_element_open_graph_description' => array('#type' => 'html_tag',
-									  '#tag' => 'meta',
-									  '#attributes' => array('property' =>  'og:description',
-												 'content' => 'Skillman Library, Lafayette College',
-												 )
-									  ),
+
 			   );
-			   
- 
+    
     foreach($meta_elements as $key => $meta_element) {
 
       // Add header meta tag for IE to head
@@ -80,10 +91,10 @@ jQuery(document).ready(function() { PDFView.open('" . $base_url . "/islandora/ob
 	$init_page = array_shift($init_pages);
 
 	$meta_element_open_graph_image = array('#type' => 'html_tag',
-				       '#tag' => 'meta',
-				       '#attributes' => array('property' =>  'og:image',
-							      'content' => $base_url . '/islandora/object/' . $init_page['pid'] . '/datastream/JPG/view')
-				       );
+					       '#tag' => 'meta',
+					       '#attributes' => array('property' =>  'og:image',
+								      'content' => $base_url . '/islandora/object/' . $init_page['pid'] . '/datastream/JPG/view')
+					       );
       } else {
 
 	 $meta_element_open_graph_image = array('#type' => 'html_tag',
@@ -95,23 +106,16 @@ jQuery(document).ready(function() { PDFView.open('" . $base_url . "/islandora/ob
 
       $collection = 'East Asia Image Collection';
 
-      $meta_elements = array('meta_element_open_graph_image' => $meta_element_open_graph_image,
-			     'meta_element_open_graph_title' => array('#type' => 'html_tag',
-								      '#tag' => 'meta',
-								      '#attributes' => array('property' =>  'og:title',
-											     'content' => $islandora_object->label,
-											     )
-								      ),
-			     'meta_element_open_graph_site_name' => array('#type' => 'html_tag',
-									  '#tag' => 'meta',
-									  '#attributes' => array('property' =>  'og:site_name',
-												 'content' => $collection,
-												 )
-									  ),
+      $meta_elements = array(
+			     'meta_element_open_graph_url' => $meta_element_open_graph_url,
+			     'meta_element_open_graph_author' => $meta_element_open_graph_author,
+			     'meta_element_open_graph_image' => $meta_element_open_graph_image,
+			     'meta_element_open_graph_title' => $meta_element_open_graph_title,
+
 			     'meta_element_open_graph_description' => array('#type' => 'html_tag',
 									    '#tag' => 'meta',
 									    '#attributes' => array('property' =>  'og:description',
-												   'content' => 'Skillman Library, Lafayette College',
+												   'content' => $collection,
 												   )
 									    ),
 			     );
