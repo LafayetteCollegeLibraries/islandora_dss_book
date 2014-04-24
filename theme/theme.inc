@@ -37,7 +37,7 @@ jQuery(document).ready(function() { PDFView.open('" . $base_url . "/islandora/ob
     $meta_ie_render_engine = array('#type' => 'html_tag',
 				   '#tag' => 'meta',
 				   '#attributes' => array('property' =>  'og:image',
-							  'content' => $base_url . '/' . current_path() . '/datastream/OBJ/view',
+							  'content' => $base_url . '/' . current_path() . '/datastream/TN/view',
 							  )
 				   );
  
