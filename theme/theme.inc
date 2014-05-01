@@ -62,7 +62,13 @@ function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
 
     // Work-around
     drupal_add_js("
-jQuery(document).ready(function() { PDFView.open('/islandora/object/" . $islandora_object->id . "/datastream/OBJ/view') });",
+jQuery(document).ready(function() { setTimeout(function() {
+
+PDFView.open('/islandora/object/" . $islandora_object->id . "/datastream/OBJ/view')
+
+}, 200); });
+
+",
 		  array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
 
     $meta_elements['meta_element_open_graph_image'] = array('#type' => 'html_tag',
