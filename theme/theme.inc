@@ -36,12 +36,6 @@ function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
 				       '#attributes' => array('property' =>  'og:url',
 							      'content' => $base_url . '/' . drupal_get_path_alias()),
 				       );
-
-  $meta_element_open_graph_url = array('#type' => 'html_tag',
-				       '#tag' => 'meta',
-				       '#attributes' => array('property' =>  'og:url',
-							      'content' => $base_url . '/' . drupal_get_path_alias()),
-				       );
   $meta_element_open_graph_author = array('#type' => 'html_tag',
 					  '#tag' => 'meta',
 					  '#attributes' => array('property' =>  'og:author',
@@ -61,14 +55,14 @@ function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
 			 'meta_element_open_graph_author' => $meta_element_open_graph_author,
 			 'meta_element_open_graph_title' => $meta_element_open_graph_title,
 			 );
-  
+
   if(in_array('islandora:newspaper', $islandora_object->getParents())) {
 
     islandora_dss_pdf_preprocess_islandora_pdf($variables);
 
     // Work-around
-    drupal_add_js("PDFView.open('" . $base_url . "/islandora/object/" . $islandora_object->id . "/datastream/OBJ/view' );
-jQuery(document).ready(function() { PDFView.open('" . $base_url . "/islandora/object/" . $islandora_object->id . "/datastream/OBJ/view' )  });",
+    drupal_add_js("
+jQuery(document).ready(function() { PDFView.open('/islandora/object/" . $islandora_object->id . "/datastream/OBJ/view') });",
 		  array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
 
     $meta_elements['meta_element_open_graph_image'] = array('#type' => 'html_tag',
