@@ -89,11 +89,10 @@ PDFView.open('/islandora/object/" . $islandora_object->id . "/datastream/OBJ/vie
       // Add header meta tag for IE to head
       drupal_add_html_head($meta_element, $key);
     }
-
   } else {
 
     // Determine if OpenSeadragon is the viewer...
-    if(preg_match('/openseadragon/', $variables['viewer'])) {
+    if(array_key_exists('viewer', $variables) and preg_match('/openseadragon/', $variables['viewer'])) {
 
       module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
       $init_pages = islandora_paged_content_get_pages($islandora_object);
