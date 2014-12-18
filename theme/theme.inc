@@ -56,7 +56,8 @@ function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
 			 'meta_element_open_graph_title' => $meta_element_open_graph_title,
 			 );
 
-  if(in_array('islandora:newspaper', $islandora_object->getParents())) {
+  if(in_array('islandora:newspaper', $islandora_object->getParents()) or
+     in_array('islandora:alumni', $islandora_object->getParents())) {
 
     islandora_dss_pdf_preprocess_islandora_pdf($variables);
 
