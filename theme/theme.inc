@@ -72,6 +72,13 @@ PDFView.open('/islandora/object/" . $islandora_object->id . "/datastream/OBJ/vie
 ",
 		  array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
 
+    /**
+     * Passing the selector for the PDF.js markup
+     *
+     */
+    drupal_add_js(array('islandoraDssBook' => array('selector' => '.islandora-pdf-content-wrapper',
+						    'grippieSelector' => '.islandora-pdf-content')), 'setting');
+
     $meta_elements['meta_element_open_graph_image'] = array('#type' => 'html_tag',
 							    '#tag' => 'meta',
 							    '#attributes' => array('property' =>  'og:image',
@@ -141,4 +148,13 @@ PDFView.open('/islandora/object/" . $islandora_object->id . "/datastream/OBJ/vie
       $variables['viewer_page_controls'] = drupal_render($viewer_page_controls);
     }
   }
+
+  /**
+   * Adding support for the integration of the Drupal "grippie"
+   *
+   */
+
+  drupal_add_css( drupal_get_path('module', 'islandora_dss_book') . '/css/islandora_dss_book.css' );
+  drupal_add_js( drupal_get_path('module', 'islandora_dss_book') . '/js/build/islandora_dss_book.js' );
+
   }
