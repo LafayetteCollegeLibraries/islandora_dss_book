@@ -48,14 +48,70 @@ function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
 								'content' => $islandora_object->label,
 								)
 					 );
+
+  /**
+   * Iterate through each array for the generation of <meta> Elements
+   * @todo Refactor for a Drupal-based UI
+   *
+   */
+  $meta_elements = array(
+			 'meta_element_open_graph_type' => array('#type' => 'html_tag',
+			       '#tag' => 'meta',
+								 '#attributes' => array('property' =>  'og:type',
+						      'content' => 'article'),
+			       ),
+			 'meta_element_open_graph_url' => array('#type' => 'html_tag',
+			       '#tag' => 'meta',
+			       '#attributes' => array('property' =>  'og:url',
+						      'content' => $base_url . '/' . drupal_get_path_alias()),
+			       ),
+			 'meta_element_open_graph_author' => array('#type' => 'html_tag',
+			       '#tag' => 'meta',
+			       '#attributes' => array('property' =>  'og:author',
+						      'content' => 'https://www.facebook.com/LafayetteCollegeLibrary',
+						      )
+			       ),
+			 'meta_element_open_graph_title' => array('#type' => 'html_tag',
+			       '#tag' => 'meta',
+			       '#attributes' => array('property' =>  'og:title',
+						      'content' => $islandora_object->label,
+						      )
+			       )
+			 );
+
+  // Additionally, iterate through each Dublin Core element, and insert the HTML-encoded metadata
+
+  foreach($variables['dc_array'] as $dc_key => $dc_element) {
+
+    if( !empty($dc_element['value']) ) {
+
+      $key = 'meta_element_'  . preg_replace('/\:/', '_', $dc_key);
+      $segments = explode(':', $dc_key);
+      $name = array_pop($segments);
+      
+      $meta_elements[$key] = array('#type' => 'html_tag',
+				   '#tag' => 'meta',
+				   '#attributes' => array('name' => 'DC.' . $name,
+							  'content' => $dc_element['value'])
+				   );
+    }
+  }
+  
   // For all <meta> elements
+
+  /*
   $meta_elements = array(
 			 'meta_element_open_graph_type' => $meta_element_open_graph_type,
 			 'meta_element_open_graph_url' => $meta_element_open_graph_url,
 			 'meta_element_open_graph_author' => $meta_element_open_graph_author,
 			 'meta_element_open_graph_title' => $meta_element_open_graph_title,
 			 );
+  */
 
+  /**
+   * For the Object members of the Lafayette Newspaper and Lafayette Magazine Collections
+   *
+   */
   if(in_array('islandora:newspaper', $islandora_object->getParents()) or
      in_array('islandora:alumni', $islandora_object->getParents())) {
 
@@ -79,6 +135,7 @@ PDFView.open('/islandora/object/" . $islandora_object->id . "/datastream/OBJ/vie
     drupal_add_js(array('islandoraDssBook' => array('selector' => '.islandora-pdf-content-wrapper',
 						    'grippieSelector' => '.islandora-pdf-content')), 'setting');
 
+    
     $meta_elements['meta_element_open_graph_image'] = array('#type' => 'html_tag',
 							    '#tag' => 'meta',
 							    '#attributes' => array('property' =>  'og:image',
@@ -88,15 +145,24 @@ PDFView.open('/islandora/object/" . $islandora_object->id . "/datastream/OBJ/vie
     $meta_elements['meta_element_open_graph_site_name'] = array('#type' => 'html_tag',
 								'#tag' => 'meta',
 								'#attributes' => array('property' =>  'og:site_name',
-										       'content' => 'Lafayette Newspaper Collection',
+										       'content' => in_array('islandora:newspaper', $islandora_object->getParents()) ?
+										       'Lafayette Newspaper Collection' : 'Lafayette Magazine Collection',
 										       )
 								);
 
+    /**
+     * Insert additional metadata from the MODS Document
+     *
+     */
+    dpm($variables);
+
+    /*
     foreach($meta_elements as $key => $meta_element) {
 
       // Add header meta tag for IE to head
       drupal_add_html_head($meta_element, $key);
     }
+    */
   } else {
 
     // Determine if OpenSeadragon is the viewer...
@@ -133,11 +199,6 @@ PDFView.open('/islandora/object/" . $islandora_object->id . "/datastream/OBJ/vie
 											   'content' => $collection,
 											   )
 								    );
-      foreach($meta_elements as $key => $meta_element) {
-	
-	// Add header meta tag for IE to head
-	drupal_add_html_head($meta_element, $key);
-      }
  
       // If these are East Asia Image Collection postcards, modify the text for the links...
       $prev_content = t('Previous');
@@ -147,6 +208,11 @@ PDFView.open('/islandora/object/" . $islandora_object->id . "/datastream/OBJ/vie
       
       $variables['viewer_page_controls'] = drupal_render($viewer_page_controls);
     }
+  }
+  
+  foreach($meta_elements as $key => $meta_element) {
+
+    drupal_add_html_head($meta_element, $key);
   }
 
   /**
