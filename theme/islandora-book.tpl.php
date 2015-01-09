@@ -6,6 +6,9 @@
  *
  */
 ?>
+
+<div itemscope itemtype="http://schema.org/Book">
+
 <?php if (isset($pdf_viewer)): ?>
     <div class="islandora-pdf-object islandora">
        <div class="islandora-pdf-content-wrapper clearfix">
@@ -13,9 +16,8 @@
        <div class="islandora-pdf-content">
 
 	  <?php print $pdf_viewer; ?>
-</div>
-
-</div>
+       </div>
+    </div>
 
 <?php else: ?>
 
@@ -60,27 +62,17 @@ endif;
               <?php print $value['label']; ?>
             </dt>
 
-            <dd class="<?php print $value['class']; ?><?php print $row_field == 0 ? ' first' : ''; ?>">
+            <dd class="<?php print $value['class']; ?><?php print $row_field == 0 ? ' first' : ''; ?>" itemprop="<?php print array_key_exists('itemprop', $value) ? $value['itemprop'] : ''; ?>" ><!-- This should be refactored into a theme hook -->
 
               <?php if(array_key_exists('date_value', $value)): ?>
 
-	        <?php
-
-		    /*
-		    print array_key_exists('facet', $value) ? l($value['date_value'], "islandora/search/*:*", array('query' => array('f[0]' => $value['facet'] . ':' . $value['facet_value'] . ''
-																     ))) : $value['date_value'];
-		    */
-		    print $value['facet_href'];
-		    ?>
+	        <?php print $value['facet_href']; ?>
 	      <?php else: ?>
 
                 <?php
 
-		    // print array_key_exists('facet', $value) ? l($value['value'], "islandora/search/eastasia." . $value['facet'] . "%3A" . $value['facet_value']) : $value['value'];
 		    if(array_key_exists('facet', $value)) {
 
-		      //print l($value['value'], "islandora/search/*:*?f[0]=" . $value['facet'] . ':' . $value['facet_value'] . '');
-		      //print l($value['value'], "islandora/search/*:*", array('query' => array('f[0]' => $value['facet'] . ':' . $value['facet_value'] . '')));
 		      print $value['facet_href'];
 		    } elseif(array_key_exists('href', $value)) {
 
@@ -100,3 +92,5 @@ endif;
       </dl>
     </div>
   </fieldset>
+
+</div><!-- Resolves the scope for the item -->
