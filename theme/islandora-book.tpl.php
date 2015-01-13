@@ -7,7 +7,7 @@
  */
 ?>
 
-<div itemscope itemtype="http://schema.org/Book">
+<div typeof="Book" itemscope itemtype="http://schema.org/Book">
 
 <?php if (isset($pdf_viewer)): ?>
     <div class="islandora-pdf-object islandora">
@@ -62,7 +62,7 @@ endif;
               <?php print $value['label']; ?>
             </dt>
 
-            <dd class="<?php print $value['class']; ?><?php print $row_field == 0 ? ' first' : ''; ?>" itemprop="<?php print array_key_exists('itemprop', $value) ? $value['itemprop'] : ''; ?>" ><!-- This should be refactored into a theme hook -->
+            <dd class="<?php print $value['class']; ?><?php print $row_field == 0 ? ' first' : ''; ?>" property="<?php print array_key_exists('property', $value) ? $value['property'] : ''; ?>" itemprop="<?php print array_key_exists('itemprop', $value) ? $value['itemprop'] : ''; ?>" >
 
               <?php if(array_key_exists('date_value', $value)): ?>
 

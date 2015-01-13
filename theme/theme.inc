@@ -97,17 +97,6 @@ function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
     }
   }
   
-  // For all <meta> elements
-
-  /*
-  $meta_elements = array(
-			 'meta_element_open_graph_type' => $meta_element_open_graph_type,
-			 'meta_element_open_graph_url' => $meta_element_open_graph_url,
-			 'meta_element_open_graph_author' => $meta_element_open_graph_author,
-			 'meta_element_open_graph_title' => $meta_element_open_graph_title,
-			 );
-  */
-
   /**
    * For the Object members of the Lafayette Newspaper and Lafayette Magazine Collections
    *
@@ -150,19 +139,9 @@ PDFView.open('/islandora/object/" . $islandora_object->id . "/datastream/OBJ/vie
 										       )
 								);
 
-    /**
-     * Insert additional metadata from the MODS Document
-     *
-     */
+    //
     dpm($variables);
 
-    /*
-    foreach($meta_elements as $key => $meta_element) {
-
-      // Add header meta tag for IE to head
-      drupal_add_html_head($meta_element, $key);
-    }
-    */
   } else {
 
     // Determine if OpenSeadragon is the viewer...
