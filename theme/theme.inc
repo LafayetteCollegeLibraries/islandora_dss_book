@@ -66,17 +66,18 @@ function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
 						      'content' => $base_url . '/' . drupal_get_path_alias()),
 			       ),
 			 'meta_element_open_graph_author' => array('#type' => 'html_tag',
-			       '#tag' => 'meta',
-			       '#attributes' => array('property' =>  'og:author',
-						      'content' => 'https://www.facebook.com/LafayetteCollegeLibrary',
-						      )
-			       ),
+								   '#tag' => 'meta',
+								   '#attributes' => array('property' =>  'og:author',
+											  'content' => 'https://www.facebook.com/LafayetteCollegeLibrary',
+											  )
+								   ),
 			 'meta_element_open_graph_title' => array('#type' => 'html_tag',
-			       '#tag' => 'meta',
-			       '#attributes' => array('property' =>  'og:title',
-						      'content' => $islandora_object->label,
-						      )
-			       )
+								  '#tag' => 'meta',
+								  '#attributes' => array('property' =>  'og:title',
+											 'content' => $islandora_object->label,
+											 )
+								  )
+			 
 			 );
 
   // Additionally, iterate through each Dublin Core element, and insert the HTML-encoded metadata
@@ -101,8 +102,11 @@ function islandora_dss_book_preprocess_islandora_book_book(array &$variables) {
    * For the Object members of the Lafayette Newspaper and Lafayette Magazine Collections
    *
    */
-  if(in_array('islandora:newspaper', $islandora_object->getParents()) or
-     in_array('islandora:alumni', $islandora_object->getParents())) {
+  $pdf_collection_pids = variable_get('islandora_dss_book_pdf_collection_pids', array('islandora:newspaper','islandora:alumni','islandora:shakespeare'));
+  $intersect = array_intersect($islandora_object->getParents(), $pdf_collection_pids);
+  $is_in_pdf_collection = !empty($intersect);
+
+  if($is_in_pdf_collection) {
 
     islandora_dss_pdf_preprocess_islandora_pdf($variables);
 
